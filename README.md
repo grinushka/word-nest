@@ -1,50 +1,102 @@
-# Word Nest (Backend)
+# Word Nest API
 
-Simple Express + TypeScript + PostgreSQL + Prisma backend for vocabulary learning.
+Word Nest is a backend project for a vocabulary learning app.  
+This project showcases practical backend engineering skills: API design, data modeling, validation, error handling, and clean TypeScript project structure.
 
-## Quick start
+## What This Project Demonstrates
 
-1. Install dependencies.
+- Building a REST API with `Express` + `TypeScript`
+- Modeling relational data with `Prisma` + `PostgreSQL`
+- Request validation using `Zod`
+- Layered architecture (`routes -> controllers -> services -> database`)
+- Centralized, production-style error handling
+- Many-to-many relationship handling (`Word <-> Category`)
+
+## Tech Stack
+
+- `Node.js`
+- `Express`
+- `TypeScript`
+- `Prisma ORM`
+- `PostgreSQL`
+- `Zod`
+
+## Architecture Overview
+
+The codebase is organized for maintainability:
+
+- `src/routes`: endpoint definitions
+- `src/controllers`: request/response handling
+- `src/services`: business logic and database operations
+- `src/validators`: schema validation
+- `src/middleware`: global error handling
+- `src/db`: Prisma client setup
+
+
+## API Endpoints
+
+Base URL in local development: `http://localhost:4000`
+
+### Words
+
+- `GET /api/words` - list all words with categories
+- `POST /api/words` - create word
+- `PATCH /api/words` - update word
+- `DELETE /api/words` - delete word
+
+### Categories
+
+- `GET /api/categories` - list categories
+- `POST /api/categories` - create category
+- `PATCH /api/categories` - update category
+- `DELETE /api/categories` - delete category
+- `POST /api/categories/assign-word` - assign a word to category
+
+```
+## Local Setup
+
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Create `.env` from `.env.example` and set `DATABASE_URL`.
+2. Create `.env` from `.env.example` and set your `DATABASE_URL`.
 
-3. Generate Prisma client.
+3. Generate Prisma client:
 
 ```bash
 npm run prisma:generate
 ```
 
-4. Run migrations.
+4. Run migrations:
 
 ```bash
 npm run prisma:migrate
 ```
 
-5. Start dev server.
+5. Start the dev server:
 
 ```bash
 npm run dev
 ```
 
-## Reminder checklist
+The server runs on `http://localhost:4000` by default.
 
-- [ ] `.env` exists and `DATABASE_URL` is set.
-- [ ] `npm run prisma:generate` has been run after schema changes.
-- [ ] `npm run prisma:migrate` has been run when needed.
-- [ ] `npm run build` passes.
+## Available Scripts
 
-## Troubleshooting notes
+- `npm run dev` - start development server
+- `npm run build` - compile TypeScript to `dist`
+- `npm run start` - run compiled app
+- `npm run prisma:generate` - regenerate Prisma client
+- `npm run prisma:migrate` - run Prisma migrations in dev
 
-### `Property 'word' does not exist on type 'PrismaClient...` 
+## Notes
 
-Cause: Prisma client types are stale or not generated.
-
-Fix:
+- If Prisma types look outdated, run:
 
 ```bash
 npm run prisma:generate
 ```
+
+- This project currently focuses on backend API implementation and core architecture.
