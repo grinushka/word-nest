@@ -2,15 +2,30 @@ import prisma from '../db/prisma';
 import { HttpError } from '../utils/http-error';
 import type { CreateWordInput, UpdateWordInput } from '../validators/word.validator';
 
+const wordWithCategories = {
+  categories: true,
+} as const;
+
 const getWords = () => {
   return prisma.word.findMany({
     orderBy: {
       createdAt: 'desc',
     },
-    include: {
-      categories: true,
-    },
+    include: wordWithCategories,
   });
+};
+
+const getWord = async (id: number) => {
+  const word = await prisma.word.findUnique({
+    where: { id },
+    include: wordWithCategories,
+  });
+
+  if (!word) {
+    throw new HttpError(404, `Word with id ${id} not found.`);
+  }
+
+  return word;
 };
 
 const createWord = (data: CreateWordInput) => {
@@ -39,9 +54,7 @@ const createWord = (data: CreateWordInput) => {
             }
           : undefined,
       },
-      include: {
-        categories: true,
-      },
+      include: wordWithCategories,
     });
   });
 };
@@ -80,18 +93,14 @@ const updateWord = async (id: number, data: UpdateWordInput) => {
             set: categoryIds.map((categoryId) => ({ id: categoryId })),
           },
         },
-        include: {
-          categories: true,
-        },
+        include: wordWithCategories,
       });
     }
 
     return tx.word.update({
       where: { id },
       data: wordData,
-      include: {
-        categories: true,
-      },
+      include: wordWithCategories,
     });
   });
 };
@@ -110,4 +119,4 @@ const deleteWord = async (id: number) => {
   });
 };
 
-export { createWord, deleteWord, getWords, updateWord };
+export { createWord, deleteWord, getWord, getWords, updateWord };

@@ -7,21 +7,11 @@ const createCategorySchema = z.object({
 
 const updateCategorySchema = z
   .object({
-    id: z.coerce.number().int().positive('id must be a positive integer.'),
     name: z.string().trim().min(1, 'name must be a non-empty string.').optional(),
   })
   .refine((data) => data.name !== undefined, {
     message: 'At least one updatable field is required.',
   });
-
-const deleteCategorySchema = z.object({
-  id: z.coerce.number().int().positive('id must be a positive integer.'),
-});
-
-const assignWordToCategorySchema = z.object({
-  wordId: z.coerce.number().int().positive('wordId must be a positive integer.'),
-  categoryId: z.coerce.number().int().positive('categoryId must be a positive integer.'),
-});
 
 const validateCreateCategory = (body: unknown): CreateCategoryInput => {
   try {
@@ -31,7 +21,7 @@ const validateCreateCategory = (body: unknown): CreateCategoryInput => {
   }
 };
 
-const validateUpdateCategory = (body: unknown): UpdateCategoryRequestInput => {
+const validateUpdateCategory = (body: unknown): UpdateCategoryInput => {
   try {
     return updateCategorySchema.parse(body);
   } catch (error) {
@@ -39,13 +29,14 @@ const validateUpdateCategory = (body: unknown): UpdateCategoryRequestInput => {
   }
 };
 
-const validateDeleteCategory = (body: unknown): number => {
-  try {
-    return deleteCategorySchema.parse(body).id;
-  } catch (error) {
-    throw toHttpError(error);
-  }
-};
+const assignWordToCategorySchema = z.object({
+  wordId: z.coerce.number().int().positive('wordId must be a positive integer.'),
+  categoryId: z.coerce.number().int().positive('categoryId must be a positive integer.'),
+});
+
+type CreateCategoryInput = z.infer<typeof createCategorySchema>;
+type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
+type AssignWordToCategoryInput = z.infer<typeof assignWordToCategorySchema>;
 
 const validateAssignWordToCategory = (body: unknown): AssignWordToCategoryInput => {
   try {
@@ -55,21 +46,5 @@ const validateAssignWordToCategory = (body: unknown): AssignWordToCategoryInput 
   }
 };
 
-type CreateCategoryInput = z.infer<typeof createCategorySchema>;
-type UpdateCategoryRequestInput = z.infer<typeof updateCategorySchema>;
-type UpdateCategoryInput = Omit<UpdateCategoryRequestInput, 'id'>;
-type AssignWordToCategoryInput = z.infer<typeof assignWordToCategorySchema>;
-
-export {
-  validateAssignWordToCategory,
-  validateCreateCategory,
-  validateDeleteCategory,
-  validateUpdateCategory,
-};
-
-export type {
-  AssignWordToCategoryInput,
-  CreateCategoryInput,
-  UpdateCategoryInput,
-  UpdateCategoryRequestInput,
-};
+export { validateAssignWordToCategory, validateCreateCategory, validateUpdateCategory };
+export type { AssignWordToCategoryInput, CreateCategoryInput, UpdateCategoryInput };

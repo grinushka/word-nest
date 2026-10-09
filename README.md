@@ -40,19 +40,20 @@ Base URL in local development: `http://localhost:4000`
 ### Words
 
 - `GET /api/words` - list all words with categories
+- `GET /api/words/:id` - get one word
 - `POST /api/words` - create word
-- `PATCH /api/words` - update word
-- `DELETE /api/words` - delete word
+- `PATCH /api/words/:id` - update word
+- `DELETE /api/words/:id` - delete word
 
 ### Categories
 
 - `GET /api/categories` - list categories
+- `GET /api/categories/:id` - get one category with its words
 - `POST /api/categories` - create category
-- `PATCH /api/categories` - update category
-- `DELETE /api/categories` - delete category
-- `POST /api/categories/assign-word` - assign a word to category
+- `PATCH /api/categories/:id` - update category
+- `DELETE /api/categories/:id` - delete category
+- `POST /api/categories/assign-word` - assign a word to a category
 
-```
 ## Local Setup
 
 1. Install dependencies:

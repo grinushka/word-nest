@@ -4,12 +4,13 @@ import {
   createCategory,
   deleteCategory,
   getCategories,
+  getCategory,
   updateCategory,
 } from '../services/category.service';
+import { validateIdParam } from '../validators/params.validator';
 import {
   validateAssignWordToCategory,
   validateCreateCategory,
-  validateDeleteCategory,
   validateUpdateCategory,
 } from '../validators/category.validator';
 
@@ -22,11 +23,11 @@ const getCategoriesController = async (_req: Request, res: Response, next: NextF
   }
 };
 
-const assignWordToCategoryController = async (req: Request, res: Response, next: NextFunction) => {
+const getCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const payload = validateAssignWordToCategory(req.body);
-    const word = await assignWordToCategory(payload);
-    res.status(200).json({ data: word });
+    const id = validateIdParam(req.params);
+    const category = await getCategory(id);
+    res.status(200).json({ data: category });
   } catch (error) {
     next(error);
   }
@@ -44,7 +45,8 @@ const createCategoryController = async (req: Request, res: Response, next: NextF
 
 const updateCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id, ...payload } = validateUpdateCategory(req.body);
+    const id = validateIdParam(req.params);
+    const payload = validateUpdateCategory(req.body);
     const category = await updateCategory(id, payload);
     res.status(200).json({ data: category });
   } catch (error) {
@@ -54,7 +56,7 @@ const updateCategoryController = async (req: Request, res: Response, next: NextF
 
 const deleteCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const id = validateDeleteCategory(req.body);
+    const id = validateIdParam(req.params);
     await deleteCategory(id);
     res.status(204).send();
   } catch (error) {
@@ -62,9 +64,20 @@ const deleteCategoryController = async (req: Request, res: Response, next: NextF
   }
 };
 
+const assignWordToCategoryController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const payload = validateAssignWordToCategory(req.body);
+    const word = await assignWordToCategory(payload);
+    res.status(200).json({ data: word });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
-  getCategoriesController,
   assignWordToCategoryController,
+  getCategoriesController,
+  getCategoryController,
   createCategoryController,
   updateCategoryController,
   deleteCategoryController,

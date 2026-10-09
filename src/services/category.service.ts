@@ -14,6 +14,21 @@ const getCategories = () => {
   });
 };
 
+const getCategory = async (id: number) => {
+  const category = await prisma.category.findUnique({
+    where: { id },
+    include: {
+      words: true,
+    },
+  });
+
+  if (!category) {
+    throw new HttpError(404, `Category with id ${id} not found.`);
+  }
+
+  return category;
+};
+
 const createCategory = (data: CreateCategoryInput) => {
   return prisma.category.create({
     data,
@@ -76,4 +91,11 @@ const assignWordToCategory = async ({ wordId, categoryId }: AssignWordToCategory
   });
 };
 
-export { assignWordToCategory, getCategories, createCategory, updateCategory, deleteCategory };
+export {
+  assignWordToCategory,
+  getCategories,
+  getCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+};

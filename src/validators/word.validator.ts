@@ -13,7 +13,6 @@ const createWordSchema = z.object({
 
 const updateWordSchema = z
   .object({
-    id: z.coerce.number().int().positive('id must be a positive integer.'),
     word: z.string().trim().min(1, 'word must be a non-empty string.').optional(),
     meaning: z.string().trim().min(1, 'meaning must be a non-empty string.').optional(),
     example: z.string().trim().optional(),
@@ -26,21 +25,8 @@ const updateWordSchema = z
     message: 'At least one updatable field is required.',
   });
 
-const deleteWordSchema = z.object({
-  id: z.coerce.number().int().positive('id must be a positive integer.'),
-});
-
 type CreateWordInput = z.infer<typeof createWordSchema>;
-type UpdateWordRequestInput = z.infer<typeof updateWordSchema>;
-type UpdateWordInput = Omit<UpdateWordRequestInput, 'id'>;
-
-const validateDeleteWord = (body: unknown): number => {
-  try {
-    return deleteWordSchema.parse(body).id;
-  } catch (error) {
-    throw toHttpError(error);
-  }
-};
+type UpdateWordInput = z.infer<typeof updateWordSchema>;
 
 const validateCreateWord = (body: unknown): CreateWordInput => {
   try {
@@ -50,7 +36,7 @@ const validateCreateWord = (body: unknown): CreateWordInput => {
   }
 };
 
-const validateUpdateWord = (body: unknown): UpdateWordRequestInput => {
+const validateUpdateWord = (body: unknown): UpdateWordInput => {
   try {
     return updateWordSchema.parse(body);
   } catch (error) {
@@ -58,5 +44,5 @@ const validateUpdateWord = (body: unknown): UpdateWordRequestInput => {
   }
 };
 
-export { validateCreateWord, validateDeleteWord, validateUpdateWord };
-export type { CreateWordInput, UpdateWordInput, UpdateWordRequestInput };
+export { validateCreateWord, validateUpdateWord };
+export type { CreateWordInput, UpdateWordInput };
