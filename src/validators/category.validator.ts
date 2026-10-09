@@ -29,22 +29,8 @@ const validateUpdateCategory = (body: unknown): UpdateCategoryInput => {
   }
 };
 
-const assignWordToCategorySchema = z.object({
-  wordId: z.coerce.number().int().positive('wordId must be a positive integer.'),
-  categoryId: z.coerce.number().int().positive('categoryId must be a positive integer.'),
-});
-
 type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
-type AssignWordToCategoryInput = z.infer<typeof assignWordToCategorySchema>;
 
-const validateAssignWordToCategory = (body: unknown): AssignWordToCategoryInput => {
-  try {
-    return assignWordToCategorySchema.parse(body);
-  } catch (error) {
-    throw toHttpError(error);
-  }
-};
-
-export { validateAssignWordToCategory, validateCreateCategory, validateUpdateCategory };
-export type { AssignWordToCategoryInput, CreateCategoryInput, UpdateCategoryInput };
+export { validateCreateCategory, validateUpdateCategory };
+export type { CreateCategoryInput, UpdateCategoryInput };

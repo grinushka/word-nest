@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
 import {
-  assignWordToCategory,
   createCategory,
   deleteCategory,
   getCategories,
@@ -8,11 +7,7 @@ import {
   updateCategory,
 } from '../services/category.service';
 import { validateIdParam } from '../validators/params.validator';
-import {
-  validateAssignWordToCategory,
-  validateCreateCategory,
-  validateUpdateCategory,
-} from '../validators/category.validator';
+import { validateCreateCategory, validateUpdateCategory } from '../validators/category.validator';
 
 const getCategoriesController = async (_req: Request, res: Response, next: NextFunction) => {
   try {
@@ -64,18 +59,7 @@ const deleteCategoryController = async (req: Request, res: Response, next: NextF
   }
 };
 
-const assignWordToCategoryController = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const payload = validateAssignWordToCategory(req.body);
-    const word = await assignWordToCategory(payload);
-    res.status(200).json({ data: word });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export {
-  assignWordToCategoryController,
   getCategoriesController,
   getCategoryController,
   createCategoryController,

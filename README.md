@@ -42,7 +42,7 @@ Base URL in local development: `http://localhost:4000`
 - `GET /api/words` - list all words with categories
 - `GET /api/words/:id` - get one word
 - `POST /api/words` - create word
-- `PATCH /api/words/:id` - update word
+- `PATCH /api/words/:id` - update word (pass `categoryIds` to replace the word's categories)
 - `DELETE /api/words/:id` - delete word
 
 ### Categories
@@ -52,7 +52,6 @@ Base URL in local development: `http://localhost:4000`
 - `POST /api/categories` - create category
 - `PATCH /api/categories/:id` - update category
 - `DELETE /api/categories/:id` - delete category
-- `POST /api/categories/assign-word` - assign a word to a category
 
 ## Local Setup
 
